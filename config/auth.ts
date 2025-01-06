@@ -1,19 +1,34 @@
-import { defineConfig } from '@adonisjs/auth'
-import { sessionGuard, sessionUserProvider } from '@adonisjs/auth/session'
-import type { InferAuthenticators, InferAuthEvents, Authenticators } from '@adonisjs/auth/types'
-
-const authConfig = defineConfig({
-  default: 'web',
-  guards: {
-    web: sessionGuard({
-      useRememberMeTokens: false,
-      provider: sessionUserProvider({
-        model: () => import('#models/user')
-      }),
-    }),
-  },
-})
-
+import { defineConfig } from '@adonisjs/auth' 
+import { sessionGuard, sessionUserProvider } from '@adonisjs/auth/session' 
+import type { InferAuthEvents, Authenticators } from '@adonisjs/auth/types' 
+import { jwtGuard } from '@maximemrf/adonisjs-jwt/jwt_config' 
+import { JwtGuardUser, BaseJwtContent } from '@maximemrf/adonisjs-jwt/types' 
+import User from '#models/user' 
+interface JwtContent extends BaseJwtContent { 
+username: string 
+} 
+const authConfig = defineConfig({ 
+  default: 'jwt', 
+  guards: { 
+    web: sessionGuard({ 
+      useRememberMeTokens: false, 
+      provider: sessionUserProvider({ 
+        model: () => import('#models/user') 
+      }), 
+    }), 
+    jwt: jwtGuard({ 
+      tokenExpiresIn: '1h', 
+      useCookies: false, 
+      provider: sessionUserProvider({ 
+        model: () => import('#models/user'), 
+      }), 
+      content: (user: JwtGuardUser<User>): JwtContent=>({ 
+          userId: user.getId(), 
+          username: user.getOriginal().username, 
+      }), 
+    }), 
+  }, 
+}) 
 export default authConfig
 
 /**
