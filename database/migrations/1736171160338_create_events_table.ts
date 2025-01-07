@@ -12,9 +12,9 @@ export default class extends BaseSchema {
       table.timestamp('created_at')
       
       table.timestamp('updated_at')
-      table.timestamp('expired date')
+      table.timestamp('expired_at')
 
-      table.boolean('is_showed')
+      table.boolean('is_showed').defaultTo(false)
     })
   }
 

@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.integer('user_id').unsigned().references('id').inTable('users').defaultTo(null).nullable()
       table.string("trash_type").notNullable()
       table.string("redeem_code",6).notNullable()
-      table.boolean("is_redeemed").notNullable().defaultTo(false)
+      table.boolean("is_redeemed").defaultTo(false)
       table.timestamp('created_at')
     })
   }
