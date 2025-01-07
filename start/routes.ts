@@ -8,3 +8,4 @@
 */
 
 import "./routes/user.js"
+import "./routes/oauth.js"
