@@ -14,6 +14,9 @@ export default class Event extends BaseModel {
   @column()
   declare point_used: number
 
+  @column()
+  declare quantity: number
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

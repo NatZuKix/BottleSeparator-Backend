@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.string('description').nullable()
       table.integer('point_used').defaultTo(1)
       table.timestamp('created_at')
-      table.integer('quantity').notNullable()
+      table.integer('quantity').notNullable().defaultTo(0)
       table.timestamp('updated_at')
       table.timestamp('expired_at')
 

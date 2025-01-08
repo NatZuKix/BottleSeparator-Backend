@@ -19,9 +19,9 @@ export default class TrashPolicy extends AdminBasePolicy {
         return false
     }
 
-    // update(user: User, trash: Trash): AuthorizerResponse {
-    //     return false
-    // }
+    activate(user: User): AuthorizerResponse {
+        return true
+    }
 
     delete(user: User): AuthorizerResponse {
         return false

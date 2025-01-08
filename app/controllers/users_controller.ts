@@ -23,8 +23,12 @@ export default class UsersController {
         try {
             const user_id=params.id
             const targetUser=auth.getUserOrFail()
-            const user = await User.query().where('id',user_id).preload('trashs',(query)=>query.select('trash_type','redeem_code','createdAt','user_id')).firstOrFail()
             await bouncer.with('UserPolicy').authorize('show',targetUser!)
+            const user = await User
+                .query().where('id',user_id)
+                .preload('trashs',(query)=>
+                    query.select('trash_type','redeem_code','createdAt','user_id'))
+                .firstOrFail()
             return response.json(user)
         } catch (error) {
           return response.status(500).json({ error: error.message })

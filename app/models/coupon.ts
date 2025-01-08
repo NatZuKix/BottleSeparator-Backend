@@ -15,7 +15,7 @@ export default class Coupon extends BaseModel {
   declare event_id: number
 
   @column()
-  declare is_used: boolean
+  declare is_activated: boolean
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

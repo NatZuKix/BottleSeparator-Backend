@@ -3,7 +3,7 @@ import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
 router.group(()=>{ 
-        router.get('/events/:userId',[EventsController,'list']).as('events.eventByUserId')
+        router.get('/events/',[EventsController,'list']).as('events.eventByUserId')
         router.get('/event/:id',[EventsController,'show']).as('events.eventById')
 
         router.post('/event',[EventsController,'create']).as('events.createEvent')

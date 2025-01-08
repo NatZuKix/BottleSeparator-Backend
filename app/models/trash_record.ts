@@ -19,7 +19,7 @@ export default class TrashRecord extends BaseModel {
   declare redeem_code: string
 
   @column()
-  declare is_redeemed: number
+  declare is_redeemed: boolean
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
