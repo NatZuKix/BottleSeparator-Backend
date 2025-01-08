@@ -1,5 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import User from './user.js'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import Event from './event.js'
 
 export default class Coupon extends BaseModel {
   @column({ isPrimary: true })
@@ -19,4 +22,10 @@ export default class Coupon extends BaseModel {
 
   @column.dateTime()
   declare expired_date: DateTime
+
+  @belongsTo(()=>User,{ foreignKey: 'user_id' })
+  declare user: BelongsTo<typeof User>
+
+  @belongsTo(()=>Event,{ foreignKey: 'event_id' })
+  declare event: BelongsTo<typeof Event>
 }

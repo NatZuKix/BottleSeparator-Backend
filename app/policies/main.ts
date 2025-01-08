@@ -12,4 +12,9 @@
 |
 */
 
-export const policies = {}
+export const policies = {
+  UserPolicy: () => import('#policies/user_policy'),
+  EventPolicy: () => import('#policies/event_policy'),
+  TrashPolicy: () => import('#policies/trash_policy'),
+  CouponPolicy: () => import('#policies/coupon_policy')
+}

@@ -3,9 +3,16 @@ import Coupon from '#models/coupon'
 import AdminBasePolicy from '#policies/AdminBasePolicy'
 
 export default class CouponsController {
-    async list({ response }: HttpContext){
+    async listCouponByUserId({ response,params }: HttpContext){
         try {
-            const listCoupon = await Coupon.query()
+            const user_id=params.userId
+            const listCoupon = await Coupon.query().where('id',user_id)
+            .preload('user',(queryUser)=>{
+              queryUser.select("name","username","role","credit")
+            })
+            .preload('event',(queryUser)=>{
+              queryUser.select("*")
+            })
             return response.json(listCoupon)
         } catch (error) {
           return response.status(500).json({ error: error.message })
@@ -15,7 +22,13 @@ export default class CouponsController {
       async show({ params, response }: HttpContext){
         try {
             const id = params.id
-            const coupon = await Coupon.query().where('id',id).firstOrFail()
+            const coupon = await Coupon.query().where('id',id)
+            .preload('user',(queryUser)=>{
+              queryUser.select("name","username","role","credit")
+            })
+            .preload('event',(queryUser)=>{
+              queryUser.select("*")
+            }).firstOrFail()
             return response.ok(coupon)
         } catch (error) {
           return response.status(500).json({ error: error.message })
