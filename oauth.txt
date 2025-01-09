@@ -1,0 +1,15 @@
+
+
+
+MICROSOFT_CLIENT_ID=fcfb5de5-4100-465e-a468-eeed959e4a91
+MICROSOFT_CLIENT_OLO=
+MICROSOFT_REDIRECT_URI=http://localhost:3000/auth-redirect
+MICROSOFT_TENANT_ID=6f4432dc-20d2-441d-b1db-ac3380ba633d
+OAUTH_ENDPOINT=https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+
+
+MICROSOFT_CLIENT_ID=fcfb5de5-4100-465e-a468-eeed959e4a91
+MICROSOFT_CLIENT_OLO=
+MICROSOFT_REDIRECT_URI=https://bottleseparator-app.scnd.space/auth-redirect
+MICROSOFT_TENANT_ID=6f4432dc-20d2-441d-b1db-ac3380ba633d
+OAUTH_ENDPOINT=https://login.microsoftonline.com/common/oauth2/v2.0/authorizeg
