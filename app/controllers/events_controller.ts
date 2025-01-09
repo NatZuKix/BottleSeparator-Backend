@@ -2,18 +2,33 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Event from "#models/event";
 import EventPolicy from '#policies/event_policy';
 import Role from '../../Enums/Roles.js';
+import Coupon from '#models/coupon';
 
 export default class EventsController {
-  async list({ response, auth }: HttpContext) {
+  async list({ response, auth, request }: HttpContext) {
+    const redeem = request.input('redeem', 'false')
+    const user = auth.getUserOrFail()
     try {
-      const user = auth.getUserOrFail()
-      const listEvent = user.role === Role.USER ? await Event.query()
-        .where("is_showed", true)
-        .where('expired_date', '>', new Date())
-        : await Event.query()
-      return response.json(listEvent)
+      const coupons = await Coupon.query().where('user_id', user.id)
+      const eventsRedeemed = coupons.map(coupon => coupon.event_id)
+      let listEvent: Event[]
+      if (String(redeem).toLocaleLowerCase() == 'true') {
+        listEvent = await Event.query()
+          .whereIn('id', eventsRedeemed);
+      } else {
+         listEvent = await Event.query()
+          .whereNotIn('id', eventsRedeemed)
+          .where("is_showed", true)
+          .where('quantity','>',0)
+          .andWhere(query => {
+            query.where('expired_at', '>', new Date())
+              .orWhereNull('expired_at');
+          });
+      }
+      return response.ok(listEvent)
     } catch (error) {
-      return response.status(500).json({ error: error.message })
+      console.log(error);
+      return response.internalServerError(error.messages)
     }
   }
 
@@ -22,15 +37,15 @@ export default class EventsController {
       const id = params.id
       const user = auth.getUserOrFail()
       const event = user.role === Role.USER ? await Event.query()
-            .where('id', id)
-            .where("is_showed", true)
-            .where('expired_date', '>', new Date())
-            .firstOrFail()
+        .where('id', id)
+        .where("is_showed", true)
+        .where('expired_at', '>', new Date())
+        .firstOrFail()
         : Event.query().where('id', id).firstOrFail()
       return response.ok(event)
     } catch (error) {
-      console.log(error.status)
-      return response.status(500).json({ error: error.message })
+      //    console.log(error.status)
+      return response.internalServerError(error.messages)
     }
   }
 
@@ -46,7 +61,7 @@ export default class EventsController {
       newEvent.is_showed = request.input('is_showed')
       await newEvent.save()
     } catch (error) {
-      return response.status(500).json({ error: error.message })
+      return response.internalServerError(error.messages)
     }
   }
 
@@ -64,7 +79,7 @@ export default class EventsController {
       await bouncer.with(EventPolicy).authorize('edit')
       await newEvent.save()
     } catch (error) {
-      return response.status(500).json({ error: error.message })
+      return response.internalServerError(error.messages)
     }
   }
 
@@ -75,7 +90,7 @@ export default class EventsController {
       const deleteEvent = await Event.query().where('id', id).firstOrFail()
       await deleteEvent.delete()
     } catch (error) {
-      return response.status(500).json({ error: error.message })
+      return response.internalServerError(error.messages)
     }
   }
 }

@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default class AuthController {
     public async redirectToMicrosoft({ response }: HttpContext) {
         const session_stage =uuidv4()
-        console.log(session_stage);
+        //console.log(session_stage);
         
         const queryParams = new URLSearchParams({
             client_id: process.env.MICROSOFT_CLIENT_ID!,
@@ -53,7 +53,7 @@ export default class AuthController {
 
          const accessToken = tokenResponse.data.access_token
 
-         console.log(tokenResponse);
+       //  console.log(tokenResponse);
          
 
        // Retrieve user information from Microsoft Graph API
